@@ -1,0 +1,27 @@
+# Solución — Examen Práctico
+## Qué se implementó
+
+Se implementa funcion de eliminar cliente dado su id
+Se valida el formulario durante el registro de cliente mostrando error en campos obligatorios 
+se implementa funcionabilidad de eliminar cliente en backend
+se implementan test unitarios e integracion de la funcinabilidad implementadad en backend 
+...
+## Cómo se implementó
+
+Se implementa funcionabilidad en java 17  con spring boot
+...
+## Cambios en base de datos / configuración
+
+Se cambia configuracion por Postgres
+...
+## Dificultades encontradas
+
+Implementacion de front por tiempos de implementacion 
+error desde el front y microservicio al momento de guardar cliente 
+
+...
+## Mejoras que podrían aplicarse
+...
+implementacion de mas test unitarios e integracion
+
+Parte

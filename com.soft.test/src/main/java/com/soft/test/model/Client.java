@@ -5,9 +5,10 @@ import lombok.Data;
 @Data
 public class Client {
 	
-	int id;
-	String firstName;
-	String lastName;
-	String surname;
-	String phone;
+	private Integer id;
+	private String firstName;
+	private String lastName;
+	private String surname;
+	private String phone;
+	private String email;
 }

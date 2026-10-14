@@ -1,68 +1,115 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
 
 import { ClientService } from '../../services/client.service';
 import { Client } from '../../interfaces/client';
-import { MatTableDataSource } from '@angular/material/table';
-
-const clientCollection: Client[] = [];
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
-
 export class RegistrationComponent implements OnInit {
+  firstName = '';
+  lastName = '';
+  surname = '';
+  phone = '';
+  email = '';
+  formError = '';
 
-  name: string = "";
-  firstName : string = "";
-  lastName: string = "";
-  phone: string = "";
+  displayedColumns: string[] = [
+    'id',
+    'firstName',
+    'lastName',
+    'surname',
+    'phone',
+    'email',
+    'actions'
+  ];
 
-  displayedColumns: string[] = ['id', 'firstName', 'lastName', 'phone', 'actions'];
-  dataSource = new MatTableDataSource(clientCollection);
+  dataSource = new MatTableDataSource<Client>([]);
 
-  constructor(private clientService: ClientService) { }
+  constructor(private clientService: ClientService) {}
 
   ngOnInit(): void {
     this.getClients();
   }
 
-  onSave(){  
-    let client: Client;
-    client = {
-         id:  0,
-         firstName:  this.firstName,
-         lastName:  this.lastName,
-         phone:  this.phone
-    } 
+  onSave(form: NgForm): void {
+    this.formError = '';
 
-    this.clientService.saveClient(client).subscribe((data: any[])=>{
-      alert("Cliente guardado correctamente.");
-      this.getClients();
-    })  
+    if (form.invalid) {
+      form.control.markAllAsTouched();
+
+      const missingFields: string[] = [];
+      if (!this.firstName.trim()) missingFields.push('First Name');
+      if (!this.lastName.trim()) missingFields.push('Last Name');
+      if (!this.surname.trim()) missingFields.push('Surname');
+      if (!this.phone.trim()) missingFields.push('Phone');
+      if (!this.email.trim()) missingFields.push('Email');
+
+      this.formError = missingFields.length
+        ? `Completa los campos obligatorios: ${missingFields.join(', ')}.`
+        : 'Revisa los formatos indicados en los campos marcados.';
+
+      return;
+    }
+
+    const client: Client = {
+      id: 0,
+      firstName: this.firstName.trim(),
+      lastName: this.lastName.trim(),
+      surname: this.surname.trim(),
+      phone: this.phone.trim(),
+      email: this.email.trim()
+    };
+
+    this.clientService.saveClient(client).subscribe({
+      next: () => {
+        alert('Cliente guardado correctamente.');
+        form.resetForm();
+        this.clearFields();
+        this.getClients();
+      },
+      error: (error) => {
+        this.formError = `No se pudo guardar el cliente: ${error.message}`;
+      }
+    });
   }
 
-  getClients(){  
-    this.clientService.getClients()
-    .subscribe(
-      (data) => {
-        
-        this.dataSource.data = [];
-        clientCollection.length = 0;
+  deleteClient(id: number): void {
+    if (!confirm(`¿Eliminar el cliente ${id}?`)) {
+      return;
+    }
 
-        data.forEach(function (client: Client, index: number) {
-          clientCollection.push(
-            {
-              id: client.id, 
-              firstName: client.firstName,
-              lastName: client.lastName, 
-              phone: client.phone, 
-            });
-        });
-
-         this.dataSource = new MatTableDataSource(clientCollection);
+    this.clientService.deleteClient(id).subscribe({
+      next: () => {
+        alert('Cliente eliminado correctamente.');
+        this.getClients();
+      },
+      error: (error) => {
+        alert(`No se pudo eliminar el cliente: ${error.message}`);
       }
-    );
+    });
+  }
+
+  getClients(): void {
+    this.clientService.getClients().subscribe({
+      next: (clients: Client[]) => {
+        this.dataSource.data = clients;
+      },
+      error: (error) => {
+        alert(`No se pudieron cargar los clientes: ${error.message}`);
+      }
+    });
+  }
+
+  private clearFields(): void {
+    this.firstName = '';
+    this.lastName = '';
+    this.surname = '';
+    this.phone = '';
+    this.email = '';
   }
 }

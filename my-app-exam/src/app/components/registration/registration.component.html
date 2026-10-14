@@ -1,62 +1,183 @@
-
 <div fxLayout="row" style="padding-bottom: 25px">
-    <mat-label>Customer Registration</mat-label>
+  <mat-label>Customer Registration</mat-label>
 </div>
 
-<div>
+<form #clientForm="ngForm" (ngSubmit)="onSave(clientForm)" novalidate>
+  <div
+    *ngIf="formError"
+    role="alert"
+    style="color: #b00020; margin-bottom: 16px"
+  >
+    {{ formError }}
+  </div>
+
+  <div>
     <mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>First Name</mat-label>
-    <input matInput placeholder="First Name" [(ngModel)]="firstName">
+      <mat-label>First Name</mat-label>
+      <input
+        matInput
+        name="firstName"
+        placeholder="First Name"
+        [(ngModel)]="firstName"
+        #firstNameModel="ngModel"
+        required
+        maxlength="60"
+      />
+      <mat-error
+        *ngIf="firstNameModel.hasError('required') &&
+               (firstNameModel.touched || clientForm.submitted)"
+      >
+        First Name es obligatorio.
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>Last Name</mat-label>
-    <input matInput placeholder="Last Name" [(ngModel)]="lastName">
+      <mat-label>Last Name</mat-label>
+      <input
+        matInput
+        name="lastName"
+        placeholder="Last Name"
+        [(ngModel)]="lastName"
+        #lastNameModel="ngModel"
+        required
+        maxlength="60"
+      />
+      <mat-error
+        *ngIf="lastNameModel.hasError('required') &&
+               (lastNameModel.touched || clientForm.submitted)"
+      >
+        Last Name es obligatorio.
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>Phone</mat-label>
-        <input matInput placeholder="Phone" [(ngModel)]="phone">
+      <mat-label>Surname</mat-label>
+      <input
+        matInput
+        name="surname"
+        placeholder="Surname"
+        [(ngModel)]="surname"
+        #surnameModel="ngModel"
+        required
+        maxlength="60"
+      />
+      <mat-error
+        *ngIf="surnameModel.hasError('required') &&
+               (surnameModel.touched || clientForm.submitted)"
+      >
+        Surname es obligatorio.
+      </mat-error>
     </mat-form-field>
-</div>
 
-<div fxLayout="row" fxLayoutAlign="end center">
-    <button mat-raised-button  color="primary" (click)="onSave()">Save</button>
-</div>
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Phone</mat-label>
+      <input
+        matInput
+        name="phone"
+        placeholder="Phone"
+        [(ngModel)]="phone"
+        #phoneModel="ngModel"
+        required
+        pattern="^[0-9]+$"
+        maxlength="15"
+      />
+      <mat-error
+        *ngIf="phoneModel.hasError('required') &&
+               (phoneModel.touched || clientForm.submitted)"
+      >
+        Phone es obligatorio.
+      </mat-error>
+      <mat-error
+        *ngIf="phoneModel.hasError('pattern') &&
+               (phoneModel.touched || clientForm.submitted)"
+      >
+        Ingresa solo dígitos, sin espacios ni caracteres especiales.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        name="email"
+        placeholder="usuario@dominio.com"
+        [(ngModel)]="email"
+        #emailModel="ngModel"
+        required
+        email
+        maxlength="254"
+      />
+      <mat-error
+        *ngIf="emailModel.hasError('required') &&
+               (emailModel.touched || clientForm.submitted)"
+      >
+        Email es obligatorio.
+      </mat-error>
+      <mat-error
+        *ngIf="emailModel.hasError('email') &&
+               (emailModel.touched || clientForm.submitted)"
+      >
+        Ingresa un correo válido, por ejemplo usuario@dominio.com.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="end center">
+    <button mat-raised-button color="primary" type="submit">
+      Save
+    </button>
+  </div>
+</form>
 
 <div fxLayout="row" style="padding-top: 40px">
-    <mat-table matTableResponsive [dataSource]="dataSource" #table fxFill="100">
-        <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
-        </ng-container>
+  <mat-table matTableResponsive [dataSource]="dataSource" #table fxFill="100">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.id }}</mat-cell>
+    </ng-container>
 
-        <ng-container matColumnDef="firstName">
-        <mat-header-cell *matHeaderCellDef>First Name</mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.firstName}} </mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="firstName">
+      <mat-header-cell *matHeaderCellDef>First Name</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.firstName }}</mat-cell>
+    </ng-container>
 
-        <ng-container matColumnDef="lastName">
-        <mat-header-cell *matHeaderCellDef>Last Name</mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.lastName}} </mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="lastName">
+      <mat-header-cell *matHeaderCellDef>Last Name</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.lastName }}</mat-cell>
+    </ng-container>
 
-        <ng-container matColumnDef="phone">
-        <mat-header-cell *matHeaderCellDef>Phone</mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.phone}} </mat-cell>
-        </ng-container>
+    <ng-container matColumnDef="surname">
+      <mat-header-cell *matHeaderCellDef>Surname</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.surname }}</mat-cell>
+    </ng-container>
 
-        <ng-container matColumnDef="actions">
-            <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
-            <mat-cell *matCellDef="let element">
-              <div class="button">
-                <button mat-button><i class="fa fa-delete" *ngIf="element.id"></i> Delete </button>
-              </div>
-            </mat-cell >
-        </ng-container>
+    <ng-container matColumnDef="phone">
+      <mat-header-cell *matHeaderCellDef>Phone</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.phone }}</mat-cell>
+    </ng-container>
 
-        <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
-        <mat-row  *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.email }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button
+          mat-button
+          color="warn"
+          type="button"
+          (click)="deleteClient(element.id)"
+        >
+          Delete
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row
+      *matHeaderRowDef="displayedColumns; sticky: true"
+    ></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
 </div>
-

@@ -23,7 +23,7 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class ClientService {
-  private urlClients = 'http://localhost:8080/api'; 
+  private urlClients = 'http://localhost:90/api'; 
 
   constructor(private http: HttpClient) {}
 
@@ -45,6 +45,12 @@ export class ClientService {
   public saveClient(client: Client): Observable<any> {
       return this.http.post<Client>(this.urlClients + "/client", client, httpOptions).pipe(catchError(this.handleError));
   }
+
+ public deleteClient(id: number): Observable<void> {
+  return this.http
+    .delete<void>(`${this.urlClients}/clientes/${id}`)
+    .pipe(catchError(error => this.handleError(error)));
+}
 
   public getClients(): Observable<any> {
     return this.http.get(this.urlClients + "/clients").pipe(catchError(this.handleError));

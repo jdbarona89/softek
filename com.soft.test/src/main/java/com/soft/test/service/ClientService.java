@@ -29,7 +29,7 @@ public class ClientService implements IClientService {
 		try {
 			clientRepository.findAll().forEach((c) -> {
 				//convert  this to auto mapped
-				ClientDto cl = new ClientDto(c.getId(), c.getFirstName(), c.getLastName(), c.getSurname(), c.getPhone());
+				ClientDto cl = new ClientDto(c.getId(), c.getFirstName(), c.getLastName(), c.getSurname(), c.getPhone(),c.getEmail());
 				clients.add(cl);
 			});
         
@@ -55,6 +55,7 @@ public class ClientService implements IClientService {
 			client.setLastName(clientdto.getLastName());
 			client.setSurname(clientdto.getSurname());
 			client.setPhone(clientdto.getPhone());
+			client.setEmail(clientdto.getEmail());
 			
 			row = clientRepository.save(client);
         

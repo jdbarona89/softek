@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class ClientController {
 
 	@CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/client")
-    public ResponseEntity<ServiceResponse> saveClient(@RequestBody ClientDto client) {
+    public ResponseEntity<ServiceResponse> saveClient(@Valid @RequestBody ClientDto client) {
     	ServiceResponse serviceReponse = new ServiceResponse();
     	int result = clientService.save(client);
     	if (result == 1) {

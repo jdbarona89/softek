@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
+import com.soft.test.commun.exception.ClienteNoExisteException;
 import com.soft.test.commun.exception.IdDeClienteNoValidoExceptio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,10 +72,13 @@ public class ClientService implements IClientService {
 
 		Integer row=0;
 
-		if(id==null || id<0){
+		if(id == null || id <= 0){
 
 			throw  new IdDeClienteNoValidoExceptio("El Cliente no existe");
 
+		}if (!buscarClientePorId(id)){
+
+			throw new ClienteNoExisteException("El id ingresado no existe");
 		}
 
 		row=clientRepository.delete(id);

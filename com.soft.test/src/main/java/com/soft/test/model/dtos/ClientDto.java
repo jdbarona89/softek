@@ -2,6 +2,7 @@ package com.soft.test.model.dtos;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,10 @@ public class ClientDto {
 	String firstName;
 	String lastName;
 	String surname;
+
 	String phone;
+
+	@Email
 	String email;
 
 	public ClientDto(int id, String firstName, String lastName, String surname, String phone, String email) {
